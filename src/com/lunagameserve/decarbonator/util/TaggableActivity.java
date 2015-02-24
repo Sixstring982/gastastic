@@ -1,6 +1,7 @@
 package com.lunagameserve.decarbonator.util;
 
 import android.util.Log;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by sixstring982 on 2/20/15.
@@ -9,6 +10,7 @@ public abstract class TaggableActivity extends ToastActivity {
 
     protected abstract String getTag();
 
+    @NotNull
     private String bracketTag() {
         return "[" + getTag() + "]:";
     }

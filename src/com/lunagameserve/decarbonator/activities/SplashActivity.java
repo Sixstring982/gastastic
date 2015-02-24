@@ -6,11 +6,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import com.lunagameserve.decarbonator.R;
 import com.lunagameserve.decarbonator.util.UnderActivity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by sixstring982 on 2/20/15.
  */
 public class SplashActivity extends UnderActivity {
+    @NotNull
     @Override
     protected String getTag() {
         return "SplashActivity";
@@ -29,7 +31,7 @@ public class SplashActivity extends UnderActivity {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NotNull MotionEvent event) {
         boolean superTouch =  super.onTouchEvent(event);
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             pushActivity(TripSelectActivity.class);

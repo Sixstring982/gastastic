@@ -2,6 +2,7 @@ package com.lunagameserve.decarbonator.statistics;
 
 import com.lunagameserve.decarbonator.R;
 import com.lunagameserve.decarbonator.util.Screen;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by sixstring982 on 2/23/15.
@@ -13,6 +14,7 @@ public enum Statistics {
             return 15.5;
         }
 
+        @NotNull
         @Override
         protected int[] getDrawables() {
             return new int[] {
@@ -27,6 +29,7 @@ public enum Statistics {
             return 1111.11111111;
         }
 
+        @NotNull
         @Override
         protected int[] getDrawables() {
             return new int[] {
@@ -41,6 +44,7 @@ public enum Statistics {
             return 13.687;
         }
 
+        @NotNull
         @Override
         protected int[] getDrawables() {
             return new int[] {
@@ -55,6 +59,7 @@ public enum Statistics {
             return 15.384;
         }
 
+        @NotNull
         @Override
         protected int[] getDrawables() {
             return new int[] {
@@ -69,6 +74,7 @@ public enum Statistics {
             return 1.237;
         }
 
+        @NotNull
         @Override
         protected int[] getDrawables() {
             return new int[] {
@@ -82,6 +88,7 @@ public enum Statistics {
             return 2.344;
         }
 
+        @NotNull
         @Override
         protected int[] getDrawables() {
             return new int[] {
@@ -95,6 +102,7 @@ public enum Statistics {
             return 3.072;
         }
 
+        @NotNull
         @Override
         protected int[] getDrawables() {
             return new int[] {
@@ -113,6 +121,7 @@ public enum Statistics {
      */
     protected abstract double gallonRate();
 
+    @NotNull
     protected abstract int[] getDrawables();
 
     public int getRandomDrawable() {

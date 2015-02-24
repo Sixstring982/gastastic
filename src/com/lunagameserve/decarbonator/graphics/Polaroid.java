@@ -1,12 +1,12 @@
 package com.lunagameserve.decarbonator.graphics;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.lunagameserve.decarbonator.physics.PhysUtil;
 import com.lunagameserve.decarbonator.physics.Vector2;
 import com.lunagameserve.decarbonator.util.Screen;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -39,18 +40,23 @@ public class Polaroid {
 
     private final static float ROTATIONAL_FRICTION = 0.9f;
 
+    @NotNull
+    @SuppressLint("UseSparseArrays")
     private static Map<Integer, Bitmap> polaroidCache =
             new HashMap<Integer, Bitmap>();
 
     private final Bitmap bmp;
+    @NotNull
     private Vector2 velocity = new Vector2(0, 0);
+    @NotNull
     private Vector2 position = new Vector2(0, 0);
     private float rotation = 0.0f;
     private float rotationVelocity = 0.0f;
 
+    @Nullable
     private Runnable onStopCallback = null;
 
-    public Polaroid(Context context, int resId) {
+    public Polaroid(@NotNull Context context, int resId) {
         if (polaroidCache.get(resId) != null) {
             bmp = polaroidCache.get(resId);
         } else {
@@ -72,17 +78,12 @@ public class Polaroid {
         this.velocity = new Vector2(x, y);
     }
 
-    public void setVelocity(float theta, float thetaError,
-                            float speed) {
+    public void setVelocity(float theta, float thetaError, float speed) {
         theta += (Screen.getRand().nextFloat() - 0.5f) * 2f * thetaError;
         float x = (float)Math.cos(theta) * speed;
         float y = (float)Math.sin(theta) * speed;
 
         setVelocity(x, y);
-    }
-
-    public void setRotationVelocity(float theta) {
-        this.rotationVelocity = theta;
     }
 
     public float getX() {
@@ -99,7 +100,7 @@ public class Polaroid {
                 (Screen.getRand().nextFloat() - 0.5f) * 2.0f * thetaError;
     }
 
-    public void setOnStopCallback(Runnable onStopCallback) {
+    public void setOnStopCallback(@Nullable Runnable onStopCallback) {
         this.onStopCallback = onStopCallback;
     }
 
@@ -147,7 +148,7 @@ public class Polaroid {
         }
     }
 
-    private void detectCollision(ImageButton button) {
+    private void detectCollision(@NotNull ImageButton button) {
         float dpWidth = Screen.pxToDP(button.getWidth()) / 2f;
         float dpHeight = Screen.pxToDP(button.getHeight()) / 2f;
 
@@ -185,7 +186,7 @@ public class Polaroid {
                 velocity.getY()  < -1.0f;
     }
 
-    public void synchronizeButton(ImageButton btn) {
+    public void synchronizeButton(@NotNull ImageButton btn) {
         btn.setVisibility(View.VISIBLE);
         btn.setImageBitmap(getRotatedBitmap());
 
@@ -206,7 +207,7 @@ public class Polaroid {
         btn.setY(Screen.dpToPx(position.getY() - (dpHeight / 2f)));
     }
 
-    public void synchronizeTextView(TextView textView) {
+    public void synchronizeTextView(@NotNull TextView textView) {
         float xScale = Math.abs((float)Math.cos(rotation));
         float yScale = Math.abs((float) Math.sin(rotation));
 
@@ -217,6 +218,7 @@ public class Polaroid {
         textView.setVisibility(View.VISIBLE);
     }
 
+    @NotNull
     public Bitmap getRotatedBitmap() {
         Matrix mtx = new Matrix();
         mtx.setRotate((float)PhysUtil.radToDeg(rotation));

@@ -6,6 +6,8 @@ import android.widget.ArrayAdapter;
 import com.lunagameserve.nbt.NBTException;
 import com.lunagameserve.nbt.NBTSerializableListAdapter;
 import com.lunagameserve.nbt.Tag;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +17,10 @@ import java.util.List;
  */
 public class CarSet extends NBTSerializableListAdapter {
 
+    @NotNull
     private List<Car> carList = new ArrayList<Car>();
 
+    @Nullable
     private ArrayAdapter<Car> carAdapter = null;
 
     public Car get(int i) {
@@ -39,6 +43,7 @@ public class CarSet extends NBTSerializableListAdapter {
         }
     }
 
+    @Nullable
     @Override
     protected Tag listItemToTag(int i) {
         try {
@@ -62,12 +67,13 @@ public class CarSet extends NBTSerializableListAdapter {
         return carList.size();
     }
 
+    @NotNull
     @Override
     protected String listName() {
         return "cars";
     }
 
-    public void setListView(ListActivity activity, int listViewID) {
+    public void setListView(@NotNull ListActivity activity, int listViewID) {
         this.carAdapter = new ArrayAdapter<Car>(activity.getBaseContext(),
                                                 listViewID, carList);
         activity.setListAdapter(carAdapter);

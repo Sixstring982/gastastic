@@ -1,14 +1,16 @@
 package com.lunagameserve.decarbonator.util;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by sixstring982 on 2/22/15.
  */
 public class DataUtil {
 
-    public static boolean isDigits(String ival) {
-        for (int i = 0; i < ival.length(); i++) {
-            if (ival.charAt(i) < '0' ||
-                ival.charAt(i) > '9') {
+    public static boolean isDigits(@NotNull String intVal) {
+        for (int i = 0; i < intVal.length(); i++) {
+            if (intVal.charAt(i) < '0' ||
+                intVal.charAt(i) > '9') {
                 return false;
             }
         }

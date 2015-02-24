@@ -3,11 +3,10 @@ package com.lunagameserve.decarbonator.statistics;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Point;
-import android.util.Log;
 import com.lunagameserve.decarbonator.graphics.Polaroid;
 import com.lunagameserve.decarbonator.physics.PhysUtil;
 import com.lunagameserve.decarbonator.util.Screen;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +18,7 @@ public class PolaroidSet {
 
     private Statistics statistic;
 
+    @NotNull
     private List<Polaroid> gennedPolaroids = new ArrayList<Polaroid>();
 
     private final Context context;
@@ -94,7 +94,7 @@ public class PolaroidSet {
         gennedPolaroids.add(p);
     }
 
-    public void renderPolaroids(Canvas c) {
+    public void renderPolaroids(@NotNull Canvas c) {
         for (Polaroid p : gennedPolaroids) {
             Bitmap rotated = p.getRotatedBitmap();
             c.drawBitmap(rotated,
@@ -104,7 +104,7 @@ public class PolaroidSet {
         }
     }
 
-    public void renderStoppedPolaroids(Canvas c) {
+    public void renderStoppedPolaroids(@NotNull Canvas c) {
         for (Polaroid p : gennedPolaroids) {
             if (!p.isMoving()) {
                 Bitmap rotated = p.getRotatedBitmap();
@@ -116,7 +116,7 @@ public class PolaroidSet {
         }
     }
 
-    public void renderMovingPolaroids(Canvas c) {
+    public void renderMovingPolaroids(@NotNull Canvas c) {
         for (Polaroid p : gennedPolaroids) {
             if (p.isMoving()) {
                 Bitmap rotated = p.getRotatedBitmap();

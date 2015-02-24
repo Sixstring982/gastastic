@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -16,11 +17,12 @@ public class Screen {
     private static int WIDTH;
     private static float LOGICAL_DENSITY;
 
+    @NotNull
     private static Random rand = new Random(System.nanoTime());
 
     private static boolean initialized = false;
 
-    public static void initializeSizes(Context ctx) {
+    public static void initializeSizes(@NotNull Context ctx) {
         if (!initialized) {
             Point devDims = new Point();
             DisplayMetrics metrics = new DisplayMetrics();
@@ -70,6 +72,7 @@ public class Screen {
         return pxToDP(getHeight());
     }
 
+    @NotNull
     public static Random getRand() {
         return rand;
     }

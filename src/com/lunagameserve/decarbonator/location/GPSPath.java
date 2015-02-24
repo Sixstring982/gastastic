@@ -7,6 +7,8 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import com.lunagameserve.decarbonator.util.DataUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +31,17 @@ public class GPSPath implements LocationListener {
 
     private static final float METERS_BETWEEN_COLLECTION = 0.5f;
 
+    @NotNull
     private List<Location> locations = new ArrayList<Location>();
 
+    @Nullable
     private Location lastLocation = null;
 
     private long lastTimestampMS = 0;
 
     private Bitmap bmpCache;
 
+    @NotNull
     private AtomicBoolean cacheValid = new AtomicBoolean(false);
 
     /**
@@ -80,7 +85,7 @@ public class GPSPath implements LocationListener {
         this.onGPSDisconnectedListener = onGPSDisconnectedListener;
     }
 
-    public void startCollecting(LocationManager locationManager) {
+    public void startCollecting(@NotNull LocationManager locationManager) {
         this.locationManager = locationManager;
         locationManager.requestLocationUpdates(PROVIDER,
                                                MILLIS_BETWEEN_COLLECTION,
@@ -129,7 +134,7 @@ public class GPSPath implements LocationListener {
         return 0;
     }
 
-    private void gatherDataPoint(Location loc) {
+    private void gatherDataPoint(@NotNull Location loc) {
         if (connected.get()) {
             if (calibrationPointsSeen < CALIBRATION_POINTS) {
                 calibrationPointsSeen++;
@@ -154,12 +159,12 @@ public class GPSPath implements LocationListener {
     }
 
     @Override
-    public void onLocationChanged(Location loc) {
+    public void onLocationChanged(@NotNull Location loc) {
         gatherDataPoint(loc);
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    public void onStatusChanged(@NotNull String provider, int status, Bundle extras) {
         if (provider.equals(PROVIDER)) {
             if (status == LocationProvider.AVAILABLE) {
                 onGPSConnectedListener.run();
@@ -179,6 +184,7 @@ public class GPSPath implements LocationListener {
     public void onProviderDisabled(String provider) {
     }
 
+    @Nullable
     private RectF getLatLongBounds() {
         RectF rect = null;
         for (Location loc : locations) {

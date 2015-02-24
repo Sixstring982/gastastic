@@ -3,6 +3,7 @@ package com.lunagameserve.decarbonator.cars;
 import com.lunagameserve.nbt.NBTException;
 import com.lunagameserve.nbt.NBTSerializableObject;
 import com.lunagameserve.nbt.Tag;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by sixstring982 on 2/22/15.
@@ -50,11 +51,12 @@ public class Car implements NBTSerializableObject {
     }
 
     @Override
-    public void fromCompound(Tag.Compound compound) {
+    public void fromCompound(@NotNull Tag.Compound compound) {
         this.name = compound.getString("name");
         this.milesPerGallon = compound.getInt("milesPerGallon");
     }
 
+    @NotNull
     @Override
     public String toString() {
         return name + ": " + milesPerGallon + "mpg";

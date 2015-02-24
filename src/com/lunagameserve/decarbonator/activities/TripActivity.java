@@ -1,7 +1,8 @@
 package com.lunagameserve.decarbonator.activities;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.lunagameserve.decarbonator.location.GPSPath;
 import com.lunagameserve.decarbonator.statistics.StatisticSet;
 import com.lunagameserve.decarbonator.util.Screen;
 import com.lunagameserve.decarbonator.util.UnderActivity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -23,20 +26,25 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class TripActivity extends UnderActivity {
 
+    @Nullable
     private Car currentCar = null;
 
+    @NotNull
     private GPSPath currentPath = new GPSPath();
 
     private StatisticSet statistics;
 
+    @NotNull
     private AtomicBoolean keepAnimating = new AtomicBoolean(false);
 
+    @Nullable
     private Bitmap background = null;
 
     private Bitmap stoppedPolaroidBitmap;
 
     private double fakeGas = 0.0;
 
+    @NotNull
     @Override
     protected String getTag() {
         return "TripActivity";
@@ -52,7 +60,7 @@ public class TripActivity extends UnderActivity {
 
         this.setContentView(R.layout.trip_activity_layout);
         setupCurrentCar();
-        statistics = new StatisticSet(getBaseContext(), 3);
+        statistics = new StatisticSet(getBaseContext(), 0);
         statistics.setOnSingleFinishMoving(onPolaroidFinishMoving());
 
         currentPath.setOnGPSDisconnectedListener(onGPSDisconnection());
@@ -68,6 +76,7 @@ public class TripActivity extends UnderActivity {
         currentPath.stopCollecting();
     }
 
+    @NotNull
     private Runnable onGPSConnection() {
         return new Runnable() {
             @Override
@@ -137,6 +146,7 @@ public class TripActivity extends UnderActivity {
         queueAnimate();
     }
 
+    @NotNull
     private Runnable onPolaroidFinishMoving() {
         return new Runnable() {
             @Override
@@ -152,6 +162,7 @@ public class TripActivity extends UnderActivity {
         };
     }
 
+    @NotNull
     private Runnable onGPSDisconnection() {
         return new Runnable() {
             @Override
@@ -171,6 +182,7 @@ public class TripActivity extends UnderActivity {
         };
     }
 
+    @NotNull
     private Runnable onCollectGPSPoint() {
         return new Runnable() {
             @Override

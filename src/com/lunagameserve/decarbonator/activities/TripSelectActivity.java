@@ -7,13 +7,13 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import com.lunagameserve.decarbonator.R;
-import com.lunagameserve.decarbonator.graphics.BitmapUtil;
 import com.lunagameserve.decarbonator.graphics.Polaroid;
 import com.lunagameserve.decarbonator.graphics.TextFader;
 import com.lunagameserve.decarbonator.physics.PhysUtil;
 import com.lunagameserve.decarbonator.util.Screen;
 import com.lunagameserve.decarbonator.util.Ticker;
 import com.lunagameserve.decarbonator.util.UnderActivity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by sixstring982 on 2/21/15.
@@ -36,30 +36,39 @@ public class TripSelectActivity extends UnderActivity {
     private TextView walkTextView;
     private TextView bikeTextView;
 
+    @NotNull
     private Ticker onStartTicker = new Ticker(30);
 
     private enum AnimationState {
         Setup {
+            @NotNull
             @Override public AnimationState nextState() {return ThrowCar;}
         },
         ThrowCar {
+            @NotNull
             @Override public AnimationState nextState() {return ThrowBike;}
         },
         ThrowWalk{
+            @NotNull
             @Override public AnimationState nextState() {return Ready;}
         },
         ThrowBike{
+            @NotNull
             @Override public AnimationState nextState() {return ThrowWalk;}
         },
         Ready{
+            @NotNull
             @Override public AnimationState nextState() {return Ready;}
         };
 
+        @NotNull
         public abstract AnimationState nextState();
     }
 
+    @NotNull
     private AnimationState animationState = AnimationState.Setup;
 
+    @NotNull
     @Override
     protected String getTag() {
         return "TripSelectActivity";
@@ -184,6 +193,7 @@ public class TripSelectActivity extends UnderActivity {
         queueAnimate();
     }
 
+    @NotNull
     private Runnable advanceAnimationState() {
         return new Runnable() {
             @Override

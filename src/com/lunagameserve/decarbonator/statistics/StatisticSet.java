@@ -2,15 +2,17 @@ package com.lunagameserve.decarbonator.statistics;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import com.lunagameserve.decarbonator.util.Screen;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by sixstring982 on 2/23/15.
  */
 public class StatisticSet {
 
+    @NotNull
     private List<PolaroidSet> sets = new ArrayList<PolaroidSet>();
 
     public StatisticSet(Context ctx, int amount) {
@@ -18,10 +20,20 @@ public class StatisticSet {
     }
 
     private void initStatistics(Context ctx, int amount) {
-        sets.add(new PolaroidSet(ctx, Statistics.Human));
-        sets.add(new PolaroidSet(ctx, Statistics.PhoneCharges));
-        sets.add(new PolaroidSet(ctx, Statistics.TShirts));
-        sets.add(new PolaroidSet(ctx, Statistics.Showers));
+        if (amount == 0) {
+            for (Statistics s : Statistics.values()) {
+                sets.add(new PolaroidSet(ctx, s));
+            }
+        } else if (amount > Statistics.values().length) {
+            throw new IllegalArgumentException("Too many stats.");
+        } else {
+            List<Statistics> set = new ArrayList<Statistics>();
+            Collections.addAll(set, Statistics.values());
+            Collections.shuffle(set);
+            for (int i = 0; i < amount; i++) {
+                sets.add(new PolaroidSet(ctx, set.get(i)));
+            }
+        }
     }
 
     public boolean canUpdate() {
@@ -46,13 +58,13 @@ public class StatisticSet {
         }
     }
 
-    public void renderStoppedPolaroids(Canvas c) {
+    public void renderStoppedPolaroids(@NotNull Canvas c) {
         for (PolaroidSet set : sets) {
             set.renderStoppedPolaroids(c);
         }
     }
 
-    public void renderMovingPolaroids(Canvas c) {
+    public void renderMovingPolaroids(@NotNull Canvas c) {
         for (PolaroidSet set : sets) {
             set.renderMovingPolaroids(c);
         }

@@ -14,6 +14,7 @@ import com.lunagameserve.decarbonator.cars.CarSet;
 import com.lunagameserve.nbt.NBTException;
 import com.lunagameserve.nbt.NBTSerializableObject;
 import com.lunagameserve.nbt.Tag;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +31,7 @@ public class ManageCarsActivity extends ListActivity
 
     private static final String CARS_FILE_PATH = "cars.nbt";
 
+    @NotNull
     private CarSet carSet = new CarSet();
 
     @Override
@@ -49,6 +51,7 @@ public class ManageCarsActivity extends ListActivity
         lv.setOnItemClickListener(onCarSelect());
     }
 
+    @NotNull
     private AdapterView.OnItemClickListener onCarSelect() {
         return new AdapterView.OnItemClickListener() {
             @Override
@@ -85,7 +88,7 @@ public class ManageCarsActivity extends ListActivity
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
+    public void onCreateContextMenu(ContextMenu menu, @NotNull View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (v.getId() == android.R.id.list) {
@@ -95,7 +98,7 @@ public class ManageCarsActivity extends ListActivity
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(@NotNull MenuItem item) {
         int idx =((AdapterView.AdapterContextMenuInfo)item.getMenuInfo())
                 .position;
         switch(item.getItemId()) {
@@ -153,6 +156,7 @@ public class ManageCarsActivity extends ListActivity
         return true;
     }
 
+    @NotNull
     private File getCarsFile() {
         return new File(getBaseContext().getFilesDir(), CARS_FILE_PATH);
     }
@@ -165,7 +169,7 @@ public class ManageCarsActivity extends ListActivity
     }
 
     @Override
-    public void fromCompound(Tag.Compound compound) {
+    public void fromCompound(@NotNull Tag.Compound compound) {
         carSet.fromList(compound.getList("cars"));
     }
 

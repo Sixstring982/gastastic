@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.lunagameserve.decarbonator.R;
 import com.lunagameserve.decarbonator.util.DataUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by sixstring982 on 2/22/15.
@@ -18,14 +20,17 @@ public class NewCarFragment extends DialogFragment {
 
     private String newCarName;
 
+    @Nullable
     private Integer newCarMPG = null;
 
+    @Nullable
     private Runnable onAcceptCallback = null;
 
     public void setOnAcceptCallback(Runnable callback) {
         this.onAcceptCallback = callback;
     }
 
+    @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final DialogFragment self = this;

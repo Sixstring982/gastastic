@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Decarbonator</string>
+    <string name="car_name">Name</string>
+    <string name="mpglabel">Miles per Gallon:</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_delete">Delete</string>
+    <string name="car_context_modify">Modify Car</string>
+    <string name="gps_waiting">Waiting for GPS…</string>
+    <string name="gps_connected">Connected to GPS!</string>
+    <string name="no_travel_distance">Travelled 0 meters.</string>
+    <string name="finish">Finish</string>
+</resources>

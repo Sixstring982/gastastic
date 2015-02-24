@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:background="@drawable/desk_repeat"
+    android:layout_height="fill_parent">
+
+    <ImageView
+            android:id="@+id/background_trip"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+                android:id="@+id/trip_activity_layout_connectionlabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gps_waiting"/>
+        <TextView
+                android:id="@+id/trip_activity_layout_distancelabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_travel_distance"/>
+        <TextView
+                android:id="@+id/trip_activity_layout_velocitylabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Velocity: Pending"/>
+        <TextView
+                android:id="@+id/trip_activity_layout_longitudelabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitude: Pending"/>
+        <TextView
+                android:id="@+id/trip_activity_layout_latitudelabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Latitude: Pending"/>
+        <Button
+                android:id="@+id/trip_activity_layout_finishbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/finish"
+                android:onClick="finishTrip"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Polaroids"
+                android:onClick="addPolaroids"/>
+        <ImageView
+                android:id="@+id/trip_mapview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:contentDescription="Map viewer"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/trip_select_layout"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent">
+
+    <ImageView android:id="@+id/trip_select_background"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:background="@drawable/desk_repeat"/>
+
+    <ImageButton android:id="@+id/trip_select_car_button"
+                 android:layout_width="88dp"
+                 android:layout_height="107dp"
+                 android:visibility="gone"
+                 android:scaleType="fitXY"
+                 android:background="@null"
+                 android:contentDescription="Car Button"
+                 android:onClick="onCarClick"/>
+
+    <TextView android:id="@+id/trip_select_car_textview"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:visibility="gone"
+              android:shadowColor="@color/black"
+              android:shadowDx="2"
+              android:shadowDy="2"
+              android:shadowRadius="1"
+              android:text="Drive"
+              android:textSize="40sp"
+              android:textColor="@color/white"/>
+
+    <!-- android:background="@null" -->
+
+    <ImageButton android:id="@+id/trip_select_walk_button"
+                 android:layout_width="88dp"
+                 android:layout_height="107dp"
+                 android:visibility="gone"
+                 android:scaleType="fitXY"
+                 android:background="@null"
+                 android:contentDescription="Walk Button"
+                 android:onClick="onWalkClick"/>
+
+    <TextView android:id="@+id/trip_select_walk_textview"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:visibility="gone"
+              android:shadowColor="@color/black"
+              android:shadowDx="2"
+              android:shadowDy="2"
+              android:shadowRadius="1"
+              android:text="Walk"
+              android:textSize="40sp"
+              android:textColor="@color/white"/>
+
+    <ImageButton android:id="@+id/trip_select_bike_button"
+                 android:layout_width="88dp"
+                 android:layout_height="107dp"
+                 android:visibility="gone"
+                 android:scaleType="fitXY"
+                 android:background="@null"
+                 android:contentDescription="Bike Button"
+                 android:onClick="onBikeClick"/>
+
+    <TextView android:id="@+id/trip_select_bike_textview"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:visibility="gone"
+              android:shadowColor="@color/black"
+              android:shadowDx="2"
+              android:shadowDy="2"
+              android:shadowRadius="1"
+              android:text="Bike"
+              android:textSize="40sp"
+              android:textColor="@color/white"/>
+
+</RelativeLayout>

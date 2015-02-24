@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/new_car_dialog_newcarlabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Describe Car"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"/>
+
+    <View
+            android:id="@+id/new_car_dialog_spacer"
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="#287aa9"
+            android:layout_alignBottom="@+id/new_car_dialog_newcarlabel"
+            android:layout_alignParentLeft="true" />
+
+    <EditText
+            android:id="@+id/new_car_dialog_carname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:hint="@string/car_name"
+            android:layout_below="@+id/new_car_dialog_spacer"
+            android:layout_alignParentLeft="true"/>
+
+
+    <EditText
+            android:id="@+id/new_car_dialog_mpgtextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:hint="20"
+            android:layout_below="@+id/new_car_dialog_carname"
+            android:layout_alignParentLeft="true"/>
+
+    <TextView
+            android:id="@+id/new_car_dialog_mpglabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Miles per Gallon"
+            android:layout_gravity="right"
+            android:textSize="22sp"
+            android:layout_toEndOf="@+id/new_car_dialog_mpgtextview"
+            android:layout_alignTop="@+id/new_car_dialog_mpgtextview"
+            android:layout_alignBottom="@+id/new_car_dialog_mpgtextview"/>
+
+</RelativeLayout>

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.lunagameserve.decarbonator.R;
 import com.lunagameserve.decarbonator.cars.Car;
 import com.lunagameserve.decarbonator.cars.CarSet;
+import com.lunagameserve.decarbonator.statistics.StatisticType;
 import com.lunagameserve.nbt.NBTException;
 import com.lunagameserve.nbt.NBTSerializableObject;
 import com.lunagameserve.nbt.Tag;
@@ -49,6 +50,11 @@ public class ManageCarsActivity extends ListActivity
         ListView lv = (ListView)findViewById(android.R.id.list);
         registerForContextMenu(lv);
         lv.setOnItemClickListener(onCarSelect());
+        if (!loadCars()) {
+            toastLong("No vehicle data found. Please add a vehicle.");
+        } else {
+            toastLong("Select a vehicle for this drive.");
+        }
     }
 
     @NotNull
@@ -58,33 +64,20 @@ public class ManageCarsActivity extends ListActivity
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Car selected = carSet.get(position);
-
-                Intent intent = new Intent(
-                        getBaseContext(), TripActivity.class);
-
-                intent.putExtra("car_mpg", selected.getMilesPerGallon());
-                intent.putExtra("car_name", selected.getName());
-                startActivity(intent);
+                pushNextActivity(selected, false);
             }
         };
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (!saveCars()) {
-            toastLong("Could not save cars!");
-        }
-    }
+    private void pushNextActivity(@NotNull Car car, boolean debug) {
+        Intent intent = new Intent(
+                getBaseContext(), TripActivity.class);
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!loadCars()) {
-            toastLong("No vehicle data found. Please add a vehicle.");
-        } else {
-            toastLong("Select a vehicle for this drive.");
-        }
+        intent.putExtra("car_mpg", car.getMilesPerGallon());
+        intent.putExtra("car_name", car.getName());
+        intent.putExtra("debug", debug);
+        intent.putExtra("setType", StatisticType.Drive.ordinal());
+        startActivity(intent);
     }
 
     @Override
@@ -107,6 +100,9 @@ public class ManageCarsActivity extends ListActivity
                 return true;
             case R.id.delete_car:
                 onDeleteCarClick(idx);
+                return true;
+            case R.id.debug_car:
+                onDebugCarClick(idx);
                 return true;
             default: return super.onContextItemSelected(item);
         }
@@ -182,13 +178,24 @@ public class ManageCarsActivity extends ListActivity
                 oldCar.setName(ncfrag.getNewCarName());
                 oldCar.setMilesPerGallon(ncfrag.getNewCarMPG());
                 carSet.onChange();
+                if (!saveCars()) {
+                    Log.e("ManageCarsActivity", "Could not save car list!");
+                }
             }
         });
         ncfrag.show(getFragmentManager(), "EditCarFragment");
     }
 
+    private void onDebugCarClick(final int idx) {
+        Car car = carSet.get(idx);
+        pushNextActivity(car, true);
+    }
+
     private void onDeleteCarClick(final int idx) {
         carSet.remove(idx);
+        if (!saveCars()) {
+            Log.e("ManageCarsActivity", "Could not save car list!");
+        }
     }
 
     public void onAddCarClick(View view) {
@@ -200,6 +207,9 @@ public class ManageCarsActivity extends ListActivity
                                 ncfrag.getNewCarMPG());
 
                 carSet.add(c);
+                if (!saveCars()) {
+                    Log.e("ManageCarsActivity", "Could not save car list!");
+                }
             }
         });
         ncfrag.show(getFragmentManager(), "NewCarFragment");

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@drawable/desk_repeat"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:weightSum="1.0">
+
+    <TextView
+            android:id="@+id/finish_header"
+            android:shadowColor="@color/black"
+            android:shadowDy="2"
+            android:shadowDx="2"
+            android:shadowRadius="1"
+            android:textSize="20sp"
+            android:text="@string/finish_trip_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/tooltip_bubble_text"
+            android:gravity="center"/>
+
+    <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="0.95">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/finish_internal_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+    </ScrollView>
+
+    <Button
+            android:text="@string/facebook_share"
+            android:background="@drawable/com_facebook_button_blue_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFacebookClick"
+            />
+
+</LinearLayout>

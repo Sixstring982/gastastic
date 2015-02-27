@@ -23,14 +23,23 @@ public class PolaroidSet {
 
     private final Context context;
 
-    private Runnable onSingleFinishMoving;
+    public Enum getStatistic() {
+        return statistic;
+    }
+
+    public interface SingleFinishMovingListener {
+        public void onSingleFinishMoving(Polaroid p);
+    }
+
+    private SingleFinishMovingListener onSingleFinishMoving;
 
     public PolaroidSet(Context context, Statistics stat) {
         this.context = context;
         this.statistic = stat;
     }
 
-    public void setOnSingleFinishMoving(Runnable onSingleFinishMoving) {
+    public void setOnSingleFinishMoving(
+            SingleFinishMovingListener onSingleFinishMoving) {
         this.onSingleFinishMoving = onSingleFinishMoving;
     }
 
@@ -57,7 +66,7 @@ public class PolaroidSet {
                 p.update(null);
                 if (!p.isMoving() &&
                     onSingleFinishMoving != null) {
-                    onSingleFinishMoving.run();
+                    onSingleFinishMoving.onSingleFinishMoving(p);
                 }
             }
         }

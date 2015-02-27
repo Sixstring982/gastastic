@@ -1,6 +1,7 @@
 package com.lunagameserve.decarbonator.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.location.LocationManager;
@@ -12,8 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.lunagameserve.decarbonator.R;
 import com.lunagameserve.decarbonator.cars.Car;
+import com.lunagameserve.decarbonator.graphics.Polaroid;
+import com.lunagameserve.decarbonator.graphics.TextFader;
 import com.lunagameserve.decarbonator.location.GPSPath;
+import com.lunagameserve.decarbonator.statistics.PolaroidSet;
 import com.lunagameserve.decarbonator.statistics.StatisticSet;
+import com.lunagameserve.decarbonator.statistics.StatisticType;
 import com.lunagameserve.decarbonator.util.Screen;
 import com.lunagameserve.decarbonator.util.UnderActivity;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +49,14 @@ public class TripActivity extends UnderActivity {
 
     private double fakeGas = 0.0;
 
+    private boolean driving = false;
+
+    private TextFader backgroundFader;
+
+    private boolean reportedConnection = false;
+
+    private StatisticType statisticSetType;
+
     @NotNull
     @Override
     protected String getTag() {
@@ -59,8 +72,8 @@ public class TripActivity extends UnderActivity {
                                   WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         this.setContentView(R.layout.trip_activity_layout);
-        setupCurrentCar();
-        statistics = new StatisticSet(getBaseContext(), 0);
+        setupFromIntent();
+        statistics = new StatisticSet(getBaseContext(), statisticSetType);
         statistics.setOnSingleFinishMoving(onPolaroidFinishMoving());
 
         currentPath.setOnGPSDisconnectedListener(onGPSDisconnection());
@@ -68,32 +81,18 @@ public class TripActivity extends UnderActivity {
         currentPath.setOnCollectListener(onCollectGPSPoint());
         currentPath.startCollecting(
                 (LocationManager) getSystemService(Context.LOCATION_SERVICE));
+
+        backgroundFader =
+                new TextFader((TextView)findViewById(
+                        R.id.trip_begin_moving_label));
+        backgroundFader.setAlpha(255);
+        backgroundFader.setFadeRate(2);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         currentPath.stopCollecting();
-    }
-
-    @NotNull
-    private Runnable onGPSConnection() {
-        return new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TextView tv =
-                                (TextView)findViewById(
-                                        R.id.
-                                        trip_activity_layout_connectionlabel);
-
-                        tv.setText(R.string.gps_connected);
-                    }
-                });
-            }
-        };
     }
 
     private void queueAnimate() {
@@ -103,17 +102,16 @@ public class TripActivity extends UnderActivity {
 
         }
         if (keepAnimating.get()) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    runOnUiThread(new Runnable() {
+            new Thread(
+                makeUIRunnable(
+                    new Runnable() {
                         @Override
                         public void run() {
                             animate();
                         }
-                    });
-                }
-            }).start();
+                    }
+                )
+            ).start();
         }
     }
 
@@ -122,6 +120,8 @@ public class TripActivity extends UnderActivity {
         ImageView bg =
                 (ImageView) findViewById(
                         R.id.background_trip);
+
+        backgroundFader.fadeDown();
 
         if (bg.getWidth() > 0 && bg.getHeight() > 0) {
             if (background == null) {
@@ -143,146 +143,190 @@ public class TripActivity extends UnderActivity {
             bg.setImageBitmap(background);
         }
 
+        if (!statistics.canUpdate()) {
+            keepAnimating.set(false);
+        }
+
         queueAnimate();
     }
 
     @NotNull
-    private Runnable onPolaroidFinishMoving() {
-        return new Runnable() {
+    private PolaroidSet.SingleFinishMovingListener onPolaroidFinishMoving() {
+        return new PolaroidSet.SingleFinishMovingListener() {
             @Override
-            public void run() {
+            public void onSingleFinishMoving(final Polaroid p) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Canvas c = new Canvas(stoppedPolaroidBitmap);
-                        statistics.renderStoppedPolaroids(c);
+                        p.renderRotatedBitmap(c);
                     }
                 });
             }
         };
+    }
+
+    @NotNull
+    private Runnable onGPSConnection() {
+        return setGPSIcon(true);
     }
 
     @NotNull
     private Runnable onGPSDisconnection() {
-        return new Runnable() {
+        return setGPSIcon(false);
+    }
+
+    private Runnable setGPSIcon(final boolean visible) {
+        return makeUIRunnable(new Runnable() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TextView tv =
-                                (TextView)findViewById(
-                                        R.id.
-                                        trip_activity_layout_connectionlabel);
+                findViewById(R.id.trip_location)
+                        .setVisibility(visible ?
+                                View.VISIBLE : View.GONE);
 
-                        tv.setText(R.string.gps_waiting);
-                    }
-                });
+                TextView tv = (TextView)findViewById(
+                        R.id.trip_begin_moving_label);
+
+                if (visible && !reportedConnection) {
+                    toastLong("GPS Connected.");
+                    tv.setText(R.string.gps_keep_moving);
+                    reportedConnection = true;
+                }
             }
-        };
+        });
     }
 
     @NotNull
     private Runnable onCollectGPSPoint() {
-        return new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TextView tv =
-                                (TextView)findViewById(
-                                        R.id.
-                                        trip_activity_layout_distancelabel);
+        return makeUIRunnable(
+            new Runnable() {
+                @Override
+                public void run() {
+                    TextView tv =
+                            (TextView) findViewById(
+                                    R.id.
+                                            trip_activity_layout_distancelabel);
 
-                        tv.setText("Travelled " +
-                                String.format("%.2f",
-                                currentPath.getTotalDistanceInMeters()) +
-                                " meters (" +
-                                String.format("%.2f",
-                                        currentPath.getTotalDistanceInMiles()) +
-                                " miles)");
+                    tv.setText("Travelled " +
+                            String.format("%.2f",
+                                    currentPath.getTotalDistanceInMeters()) +
+                            " meters (" +
+                            String.format("%.2f",
+                                    currentPath.getTotalDistanceInMiles()) +
+                            " miles)");
 
-                        TextView vel =
-                                (TextView)findViewById(
-                                       R.id.trip_activity_layout_velocitylabel);
+                    TextView vel =
+                            (TextView) findViewById(
+                                    R.id.trip_activity_layout_velocitylabel);
 
-                        vel.setText("Velocity: " +
-                                String.format("%.2f",
-                                        currentPath.getCurrentVelocity()) +
-                                "km/h (" +
-                                String.format("%.2f",
-                                        currentPath.getCurrentVelocityMPH()) +
-                                "mph)");
+                    vel.setText("Velocity: " +
+                            String.format("%.2f",
+                                    currentPath.getCurrentVelocity()) +
+                            "km/h (" +
+                            String.format("%.2f",
+                                    currentPath.getCurrentVelocityMPH()) +
+                            "mph)");
 
-                        TextView lat =
-                                (TextView)findViewById(
-                                        R.id.
-                                        trip_activity_layout_latitudelabel);
+                    ImageView iv =
+                            (ImageView) findViewById(
+                                    R.id.trip_mapview);
 
-                        lat.setText("Latitude: " +
-                                currentPath.getCurrentLatitude());
+                    iv.setImageBitmap(currentPath.renderPath());
+                    iv.invalidate();
 
-                        TextView lon =
-                                (TextView)findViewById(
-                                        R.id.
-                                        trip_activity_layout_longitudelabel);
+                    if (currentCar != null) {
+                        double gallons = totalGallonsUsed();
 
-                        lon.setText("Longitude: " +
-                                currentPath.getCurrentLongitude());
-
-                        ImageView iv =
-                                (ImageView)findViewById(
-                                        R.id.trip_mapview);
-
-                        iv.setImageBitmap(currentPath.renderPath());
-                        iv.invalidate();
-
-                        if (currentCar != null) {
-                            double miles = currentPath
-                                    .getTotalDistanceInMiles();
-
-                            double gpm = 1.0 / currentCar.getMilesPerGallon();
-                            double gallons = miles * gpm;
-
-                            statistics.updatePolaroids(gallons,
-                                    Screen.getWidth(),
-                                    Screen.getHeight());
-                            if (statistics.canUpdate()) {
-                                if (!keepAnimating.get()) {
-                                    keepAnimating.set(true);
-                                    queueAnimate();
-                                }
+                        statistics.updatePolaroids(gallons,
+                                Screen.getWidth(),
+                                Screen.getHeight());
+                        if (statistics.canUpdate()) {
+                            if (!keepAnimating.get()) {
+                                keepAnimating.set(true);
+                                queueAnimate();
                             }
                         }
                     }
-                });
+                }
             }
-        };
+        );
     }
 
-    private void setupCurrentCar() {
+    private void setDebugMode(final boolean enabled) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int visibility = enabled ? View.VISIBLE : View.INVISIBLE;
+
+                int[] ids = new int[] {
+                        R.id.trip_debug,
+                        R.id.trip_activity_layout_distancelabel,
+                        R.id.trip_activity_layout_velocitylabel,
+                        R.id.trip_mapview, R.id.trip_add_polaroid_button
+                };
+
+                for (int i : ids) {
+                    findViewById(i).setVisibility(visibility);
+                }
+            }
+        });
+    }
+
+    private void setupFromIntent() {
         Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            this.statisticSetType =
+                    StatisticType.fromOrdinal(extras.getInt("setType"));
+        }
+        if (extras != null && extras.get("debug") != null) {
+            setDebugMode(extras.getBoolean("debug"));
+        } else {
+            setDebugMode(false);
+        }
         if (extras != null &&
                 extras.getInt("car_mpg") > 0 &&
                 extras.getString("car_name") != null) {
             currentCar = new Car(extras.getString("car_name"),
                     extras.getInt("car_mpg"));
+            driving = true;
             toastLong("Please remember to pay attention to the road.");
         } else {
             toastLong("No car selected. Going by US Average of 22mpg.");
             currentCar = new Car("US Average", 22);
+            driving = false;
         }
     }
 
+    private double totalGallonsUsed() {
+        if (currentCar == null) {
+            return 0.0;
+        }
+        double miles = currentPath
+                .getTotalDistanceInMiles();
+
+        double gpm = 1.0 / currentCar.getMilesPerGallon();
+        return miles * gpm + fakeGas;
+    }
+
     public void finishTrip(View view) {
-        /* TODO Show trip statistics */
+        Intent intent = new Intent(getBaseContext(), TripFinishActivity.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("driving", driving);
+        bundle.putDouble("gallons", totalGallonsUsed());
+        bundle.putByteArray("ordinals", statistics.getStatisticOrdinals());
+        intent.putExtras(bundle);
+
+        startActivity(intent);
+
+
+
+        finish();
     }
 
     public void addPolaroids(View view) {
-        statistics.updatePolaroids(fakeGas += 0.001,
-                Screen.getWidth(),
-                Screen.getHeight());
+        statistics.updatePolaroids(fakeGas += 0.1,
+                                   Screen.getWidth(), Screen.getHeight());
         if (statistics.canUpdate()) {
             if (!keepAnimating.get()) {
                 keepAnimating.set(true);

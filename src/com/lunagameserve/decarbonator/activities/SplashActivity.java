@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import com.facebook.AppEventsLogger;
 import com.lunagameserve.decarbonator.R;
 import com.lunagameserve.decarbonator.util.UnderActivity;
 import org.jetbrains.annotations.NotNull;
@@ -43,12 +44,14 @@ public class SplashActivity extends UnderActivity {
     protected void onResume() {
         super.onResume();
         logDebug("onResume called.");
+        AppEventsLogger.activateApp(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         logDebug("onPause called.");
+        AppEventsLogger.deactivateApp(this);
     }
 
     @Override

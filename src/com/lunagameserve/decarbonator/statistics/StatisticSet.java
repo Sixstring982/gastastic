@@ -2,10 +2,10 @@ package com.lunagameserve.decarbonator.statistics;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import com.lunagameserve.decarbonator.util.Screen;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sixstring982 on 2/23/15.
@@ -15,25 +15,23 @@ public class StatisticSet {
     @NotNull
     private List<PolaroidSet> sets = new ArrayList<PolaroidSet>();
 
-    public StatisticSet(Context ctx, int amount) {
-        initStatistics(ctx, amount);
+    public StatisticSet(Context ctx, StatisticType type) {
+        initStatistics(ctx, type);
     }
 
-    private void initStatistics(Context ctx, int amount) {
-        if (amount == 0) {
-            for (Statistics s : Statistics.values()) {
-                sets.add(new PolaroidSet(ctx, s));
-            }
-        } else if (amount > Statistics.values().length) {
-            throw new IllegalArgumentException("Too many stats.");
-        } else {
-            List<Statistics> set = new ArrayList<Statistics>();
-            Collections.addAll(set, Statistics.values());
-            Collections.shuffle(set);
-            for (int i = 0; i < amount; i++) {
-                sets.add(new PolaroidSet(ctx, set.get(i)));
-            }
+    private void initStatistics(Context ctx, StatisticType type) {
+        for (Statistics s : Statistics.suitableStatistics(type)) {
+            sets.add(new PolaroidSet(ctx, s));
         }
+    }
+
+    public byte[] getStatisticOrdinals() {
+        byte[] ordinals = new byte[sets.size()];
+        int i = 0;
+        for (PolaroidSet p : sets) {
+            ordinals[i++] = (byte)p.getStatistic().ordinal();
+        }
+        return ordinals;
     }
 
     public boolean canUpdate() {
@@ -70,7 +68,8 @@ public class StatisticSet {
         }
     }
 
-    public void setOnSingleFinishMoving(Runnable onSingleFinishMoving) {
+    public void setOnSingleFinishMoving(
+            PolaroidSet.SingleFinishMovingListener onSingleFinishMoving) {
         for (PolaroidSet set : sets) {
             set.setOnSingleFinishMoving(onSingleFinishMoving);
         }

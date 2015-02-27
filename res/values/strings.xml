@@ -10,4 +10,18 @@
     <string name="gps_connected">Connected to GPS!</string>
     <string name="no_travel_distance">Travelled 0 meters.</string>
     <string name="finish">Finish</string>
+    <string name="facebook_share">Share with Facebook</string>
+    <string name="app_id">768268919931401</string>
+    <string name="finish_trip_header">
+        <![CDATA[You burned <gallons> gallons of gasoline, which is equivalent to:]]></string>
+    <string name="map_view_description">Map Viewer</string>
+    <string name="debug_car">Debug</string>
+    <string name="trip_gps_connection_description">Trip GPS Connection Icon
+    </string>
+    <string name="trip_debug_description">Debugger Status</string>
+    <string name="polaroid_view_description">Trip Polaroid Rendering Area
+    </string>
+    <string name="gps_begin_moving">Begin Moving to Collect Data</string>
+    <string name="add_polaroids">Add Polaroids</string>
+    <string name="gps_keep_moving">Keep Moving to Collect Data</string>
 </resources>

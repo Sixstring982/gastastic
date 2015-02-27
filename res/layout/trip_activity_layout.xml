@@ -6,58 +6,100 @@
     android:background="@drawable/desk_repeat"
     android:layout_height="fill_parent">
 
+    <TextView
+            android:id="@+id/trip_begin_moving_label"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textSize="48sp"
+            android:gravity="center"
+            android:shadowColor="@color/black"
+            android:shadowDy="1"
+            android:shadowDx="1"
+            android:shadowRadius="2"
+            android:text="@string/gps_begin_moving"/>
+
+
     <ImageView
             android:id="@+id/background_trip"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:contentDescription="@string/polaroid_view_description"/>
 
-    <LinearLayout
+    <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:weightSum="1.0">
 
-
-        <TextView
-                android:id="@+id/trip_activity_layout_connectionlabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/gps_waiting"/>
+        <ImageView
+            android:id="@+id/trip_location"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/gps_status"
+            android:contentDescription="@string/trip_gps_connection_description"/>
+        <ImageView
+                android:id="@+id/trip_debug"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="gone"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/trip_location"
+                android:background="@drawable/debug"
+                android:contentDescription="@string/trip_debug_description"/>
         <TextView
                 android:id="@+id/trip_activity_layout_distancelabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_travel_distance"/>
+                android:text="@string/no_travel_distance"
+                android:visibility="visible"
+                android:shadowColor="@color/black"
+                android:shadowDy="1"
+                android:shadowDx="1"
+                android:shadowRadius="2"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"/>
         <TextView
                 android:id="@+id/trip_activity_layout_velocitylabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Velocity: Pending"/>
-        <TextView
-                android:id="@+id/trip_activity_layout_longitudelabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Longitude: Pending"/>
-        <TextView
-                android:id="@+id/trip_activity_layout_latitudelabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Latitude: Pending"/>
+                android:text="Velocity: Pending"
+                android:visibility="visible"
+                android:shadowColor="@color/black"
+                android:shadowDy="1"
+                android:shadowDx="1"
+                android:shadowRadius="2"
+                android:layout_below="@+id/trip_activity_layout_distancelabel"
+                android:layout_alignParentEnd="true"/>
+
+        <ImageView
+                android:id="@+id/trip_mapview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:contentDescription="@string/map_view_description"
+                android:visibility="invisible"
+                android:layout_below="@+id/trip_activity_layout_velocitylabel"
+                android:layout_alignEnd="@+id/trip_activity_layout_velocitylabel"/>
         <Button
                 android:id="@+id/trip_activity_layout_finishbutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/finish"
-                android:onClick="finishTrip"/>
+                android:onClick="finishTrip"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                />
         <Button
+                android:id="@+id/trip_add_polaroid_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Polaroids"
-                android:onClick="addPolaroids"/>
-        <ImageView
-                android:id="@+id/trip_mapview"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:contentDescription="Map viewer"/>
-    </LinearLayout>
+                android:visibility="gone"
+                android:text="@string/add_polaroids"
+                android:onClick="addPolaroids"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"/>
+
+    </RelativeLayout>
 </RelativeLayout>

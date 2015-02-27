@@ -1,5 +1,6 @@
 package com.lunagameserve.decarbonator.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -10,6 +11,7 @@ import com.lunagameserve.decarbonator.R;
 import com.lunagameserve.decarbonator.graphics.Polaroid;
 import com.lunagameserve.decarbonator.graphics.TextFader;
 import com.lunagameserve.decarbonator.physics.PhysUtil;
+import com.lunagameserve.decarbonator.statistics.StatisticType;
 import com.lunagameserve.decarbonator.util.Screen;
 import com.lunagameserve.decarbonator.util.Ticker;
 import com.lunagameserve.decarbonator.util.UnderActivity;
@@ -205,12 +207,16 @@ public class TripSelectActivity extends UnderActivity {
 
     public void onBikeClick(View v) {
         logDebug("Bike!");
-        pushActivity(TripActivity.class);
+        Intent intent = new Intent(getBaseContext(), TripActivity.class);
+        intent.putExtra("setType", StatisticType.Bike.ordinal());
+        startActivity(intent);
     }
 
     public void onWalkClick(View v) {
         logDebug("Walk!");
-        pushActivity(TripActivity.class);
+        Intent intent = new Intent(getBaseContext(), TripActivity.class);
+        intent.putExtra("setType", StatisticType.Walk.ordinal());
+        startActivity(intent);
     }
 
     public void onCarClick(View v) {

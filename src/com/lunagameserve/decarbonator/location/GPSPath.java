@@ -217,29 +217,31 @@ public class GPSPath implements LocationListener {
                                          Bitmap.Config.ARGB_8888);
         if (locations.size() >= 2) {
             RectF bounds = getLatLongBounds();
-            Canvas c = new Canvas(bmp);
-            float dx = BITMAP_WIDTH / bounds.width();
-            float dy = BITMAP_HEIGHT / bounds.height();
-            Paint paint = new Paint();
-            paint.setColor(Color.BLUE);
+            if (bounds != null) {
+                Canvas c = new Canvas(bmp);
+                float dx = BITMAP_WIDTH / bounds.width();
+                float dy = BITMAP_HEIGHT / bounds.height();
+                Paint paint = new Paint();
+                paint.setColor(Color.BLUE);
 
 
-            float x1dist;
-            float y1dist;
-            float x2dist;
-            float y2dist;
+                float x1dist;
+                float y1dist;
+                float x2dist;
+                float y2dist;
 
-            for (int i = 1; i < locations.size(); i++) {
-                x1dist = (float)
-                        (locations.get(i - 1).getLongitude() - bounds.left);
-                x2dist = (float)
-                        (locations.get(i).getLongitude() - bounds.left);
-                y1dist = (float)
-                        (locations.get(i - 1).getLatitude() - bounds.top);
-                y2dist = (float)
-                        (locations.get(i).getLatitude() - bounds.top);
-                c.drawLine(x1dist * dx, y1dist * dy,
-                           x2dist * dx, y2dist * dy, paint);
+                for (int i = 1; i < locations.size(); i++) {
+                    x1dist = (float)
+                            (locations.get(i - 1).getLongitude() - bounds.left);
+                    x2dist = (float)
+                            (locations.get(i).getLongitude() - bounds.left);
+                    y1dist = (float)
+                            (locations.get(i - 1).getLatitude() - bounds.top);
+                    y2dist = (float)
+                            (locations.get(i).getLatitude() - bounds.top);
+                    c.drawLine(x1dist * dx, y1dist * dy,
+                            x2dist * dx, y2dist * dy, paint);
+                }
             }
         }
         return bmp;

@@ -2,10 +2,7 @@ package com.lunagameserve.decarbonator.graphics;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
+import android.graphics.*;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -224,5 +221,12 @@ public class Polaroid {
         mtx.setRotate((float)PhysUtil.radToDeg(rotation));
         return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(),
                                    mtx, true);
+    }
+
+    public void renderRotatedBitmap(Canvas c) {
+        Bitmap bmp = getRotatedBitmap();
+        c.drawBitmap(bmp,
+                position.getX() - bmp.getWidth() / 2f,
+                position.getY() - bmp.getHeight() / 2f, null);
     }
 }

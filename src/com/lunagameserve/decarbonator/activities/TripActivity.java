@@ -21,10 +21,18 @@ import com.lunagameserve.decarbonator.statistics.StatisticSet;
 import com.lunagameserve.decarbonator.statistics.StatisticType;
 import com.lunagameserve.decarbonator.util.Screen;
 import com.lunagameserve.decarbonator.util.UnderActivity;
+import com.lunagameserve.nbt.NBTException;
+import com.lunagameserve.nbt.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by sixstring982 on 2/22/15.
@@ -317,11 +325,60 @@ public class TripActivity extends UnderActivity {
         bundle.putByteArray("ordinals", statistics.getStatisticOrdinals());
         intent.putExtras(bundle);
 
+        try {
+            accumulateUsage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         startActivity(intent);
 
-
-
         finish();
+    }
+
+    private void accumulateUsage() throws IOException {
+        double used = 0.0;
+        double saved = 0.0;
+        File usageFile = new File(getFilesDir(), "usage.nbt");
+        if (!usageFile.exists()) {
+            usageFile.createNewFile();
+        } else {
+            GZIPInputStream in =
+                    new GZIPInputStream(
+                            new FileInputStream(usageFile));
+            try {
+                Tag.Compound root = Tag.readCompound(in);
+
+                used = root.getDouble("used");
+                saved = root.getDouble("saved");
+
+            } catch (NBTException e ) {
+                e.printStackTrace();
+            } finally {
+                in.close();
+            }
+        }
+
+        Tag.Compound.Builder builder = new Tag.Compound.Builder();
+        if (driving) {
+
+            builder.addDouble("used", used + totalGallonsUsed())
+                    .addDouble("saved", saved);
+        } else {
+            builder.addDouble("saved", saved + totalGallonsUsed())
+                    .addDouble("used", used);
+        }
+
+        GZIPOutputStream out =
+                new GZIPOutputStream(
+                        new FileOutputStream(usageFile));
+        try {
+            builder.toCompound("usage").writeNamed(out);
+        } catch (NBTException e) {
+            e.printStackTrace();
+        } finally {
+            out.close();
+        }
     }
 
     public void addPolaroids(View view) {

@@ -27,6 +27,8 @@ public class TripFinishActivity extends UnderActivity {
 
     private double gallons;
 
+    private boolean driving;
+
     @Override
     protected String getTag() {
         return "TripFinishActivity";
@@ -58,7 +60,7 @@ public class TripFinishActivity extends UnderActivity {
     private void setupHeader(Bundle bundle) {
         this.gallons = bundle.getDouble("gallons", 0.0);
         String galStr = String.format("%.2f", gallons);
-        boolean driving = bundle.getBoolean("driving");
+        this.driving = bundle.getBoolean("driving");
 
         TextView tv = (TextView)findViewById(R.id.finish_header);
         tv.setText("You " + (driving ? "burned " : "saved ")  + galStr + " " +
@@ -187,11 +189,13 @@ public class TripFinishActivity extends UnderActivity {
     }
 
     public void onFacebookClick(View view) {
+        String usageStr = driving ? "used " : "saved ";
         FacebookDialog dialog = new FacebookDialog.ShareDialogBuilder(this)
                 .setApplicationName("Gastastic")
                 .setName("Gastastic for Android")
-                .setDescription("I used " + String.format("%.2f", gallons) +
-                                "gallons of gas, which is equivalent to " +
+                .setDescription("I " + usageStr +
+                                String.format("%.2f", gallons) +
+                                " gallons of gas, which is equivalent to " +
                                 Statistics.fromOrdinal(
                                         (byte)Screen.getRand().nextInt(
                                               (Statistics.values().length)))

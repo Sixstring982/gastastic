@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      android:title="@string/view_usage_context_title">
+
+    <item android:id="@+id/total_usage_item"
+        android:title="@string/menu_usage" />
+
+    <item android:id="@+id/total_savings_item"
+        android:title="@string/menu_savings" />
+
+    <item android:id="@+id/delete_usage_item"
+        android:title="@string/delete_usage" />
+
+</menu>

@@ -24,4 +24,8 @@
     <string name="gps_begin_moving">Begin Moving to Collect Data</string>
     <string name="add_polaroids">Add Polaroids</string>
     <string name="gps_keep_moving">Keep Moving to Collect Data</string>
+    <string name="view_usage_context_title">View Lifetime Usage</string>
+    <string name="menu_usage">View Total Usage</string>
+    <string name="menu_savings">View Total Savings</string>
+    <string name="delete_usage">Delete Usage Statistics</string>
 </resources>

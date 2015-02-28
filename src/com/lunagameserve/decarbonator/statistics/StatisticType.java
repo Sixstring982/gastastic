@@ -7,13 +7,13 @@ public enum StatisticType {
     Walk {
         @Override
         public boolean isSuitableFor(double gallonRate) {
-            return gallonRate > 10;
+            return true;
         }
     },
     Bike {
         @Override
         public boolean isSuitableFor(double gallonRate) {
-            return gallonRate > 5 && gallonRate < 500;
+            return gallonRate < 750;
         }
     },
     Drive {

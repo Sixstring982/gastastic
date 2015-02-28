@@ -28,7 +28,7 @@ public enum Statistics {
         @NotNull
         @Override
         public String generateGallonString(String used) {
-            return "Enough chemical energy to feed a human for " +
+            return "The chemical energy needed to feed a human for " +
                     used + " days";
         }
     },
@@ -200,7 +200,7 @@ public enum Statistics {
         @NotNull
         @Override
         public String generateGallonString(String used) {
-            return "The electricity usage of a compact flourescent light bulb" +
+            return "The electricity usage of a compact florescent light bulb" +
                     " if left on for " + used + " weeks";
         }
     },
@@ -285,6 +285,48 @@ public enum Statistics {
         @Override
         public String generateGallonString(String used) {
             return "The energy contained in " + used + " metric tons of TNT";
+        }
+    },
+    BikeHours {
+        @Override
+        protected double gallonRate() {
+            return 52.54;
+        }
+
+        @NotNull
+        @Override
+        protected int[] getDrawables() {
+            return new int[] {
+                    R.drawable.biking1
+            };
+        }
+
+        @NotNull
+        @Override
+        public String generateGallonString(String used) {
+            return "The chemical energy used when biking for "
+                    + used + " hours";
+        }
+    },
+    WalkHours {
+        @Override
+        protected double gallonRate() {
+            return 67.39;
+        }
+
+        @NotNull
+        @Override
+        protected int[] getDrawables() {
+            return new int[] {
+                    R.drawable.walking
+            };
+        }
+
+        @NotNull
+        @Override
+        public String generateGallonString(String used) {
+            return "The energy used when walking for "
+                    + used + " hours";
         }
     };
 

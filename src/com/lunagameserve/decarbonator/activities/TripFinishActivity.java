@@ -13,6 +13,7 @@ import com.facebook.widget.FacebookDialog;
 import com.lunagameserve.decarbonator.R;
 import com.lunagameserve.decarbonator.graphics.Polaroid;
 import com.lunagameserve.decarbonator.statistics.Statistics;
+import com.lunagameserve.decarbonator.util.Screen;
 import com.lunagameserve.decarbonator.util.UnderActivity;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +24,8 @@ public class TripFinishActivity extends UnderActivity {
 
     /* Facebook stuff */
     private UiLifecycleHelper lifecycleHelper;
+
+    private double gallons;
 
     @Override
     protected String getTag() {
@@ -53,7 +56,7 @@ public class TripFinishActivity extends UnderActivity {
     }
 
     private void setupHeader(Bundle bundle) {
-        double gallons = bundle.getDouble("gallons", 0.0);
+        this.gallons = bundle.getDouble("gallons", 0.0);
         String galStr = String.format("%.2f", gallons);
         boolean driving = bundle.getBoolean("driving");
 
@@ -65,7 +68,7 @@ public class TripFinishActivity extends UnderActivity {
 
 
     private void addTextViews(Bundle bundle) {
-        double gallons = bundle.getDouble("gallons", 0.0);
+        this.gallons = bundle.getDouble("gallons", 0.0);
         byte[] ordinals = bundle.getByteArray("ordinals");
 
         Statistics[] stats = new Statistics[ordinals.length];
@@ -185,8 +188,16 @@ public class TripFinishActivity extends UnderActivity {
 
     public void onFacebookClick(View view) {
         FacebookDialog dialog = new FacebookDialog.ShareDialogBuilder(this)
-                .setDescription("This is the description.")
+                .setApplicationName("Gastastic")
+                .setName("Gastastic for Android")
+                .setDescription("I used " + String.format("%.2f", gallons) +
+                                "gallons of gas, which is equivalent to " +
+                                Statistics.fromOrdinal(
+                                        (byte)Screen.getRand().nextInt(
+                                              (Statistics.values().length)))
+                                                .getGallonString(gallons))
                 .setLink("https://lunagameserve.com/")
+                .setPicture("https://lunagameserve.com/img/pump-handle.jpg")
                 .build();
         lifecycleHelper.trackPendingDialogCall(dialog.present());
     }
